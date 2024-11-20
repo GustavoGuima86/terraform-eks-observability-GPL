@@ -11,22 +11,14 @@ YAML
 }
 
 resource "helm_release" "kube_prometheus" {
-  name             = "kube-prometheus"
+  name             = local.kube_prometheus
   namespace        = var.namespace
   create_namespace = "true"
   repository       = "https://prometheus-community.github.io/helm-charts"
   chart            = "kube-prometheus-stack"
   version          = "56.21.1"
 
-  values = [local.values_grafana]
-
-  # values = [
-  #   file("${path.module}/values/values-grafana.yaml")
-  # ]
-  # set {
-  #   name  = "grafana.adminPassword"
-  #   value = aws_ssm_parameter.password_grafana.value
-  # }
+  values     = [local.values_grafana]
   depends_on = [helm_release.loki]
 }
 

@@ -11,20 +11,21 @@ implementing in progress
 
 ## Deploy using
 
-```terraform plan```
+```terraform plan -var-file="test.tfvars"```
 
-```terraform apply```
+```terraform apply -var-file="test.tfvars"```
 
 ## Lint
 
-`terraform fmt -recursive`
+`terraform fmt -recursive ../../ `
 
 ## Destroy using
 
-```terraform destroy```
+```terraform destroy -var-file="test.tfvars"```
 
 
 ## Update eks config locally
 
 `aws eks --region eu-central-1 update-kubeconfig --name test`
+
 

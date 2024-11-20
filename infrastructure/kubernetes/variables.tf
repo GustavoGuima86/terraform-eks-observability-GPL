@@ -5,7 +5,7 @@ variable "region" {
 
 variable "cluster_name" {
   type    = string
-  default = "gustavo-cluster-1"
+  default = "cluster"
 }
 
 variable "vpc_cidr" {
@@ -20,7 +20,7 @@ variable "vpc_name" {
   description = "The name of the VPC"
 }
 
-variable "namespace" {
+variable "observability_namespace" {
   type        = string
   default     = "monitoring"
   description = "The namespace to use for Kubernetes resources within the EKS cluster."
@@ -28,9 +28,10 @@ variable "namespace" {
 
 variable "loki_bucket_name" {
   type    = string
-  default = "gustavo-loki-bucket"
+  default = "loki-bucket"
 }
 
-variable "sa_loki_name" {
-  default = "loki-sa"
+variable "mimir_bucket_name" {
+  type    = string
+  default = "mimir-bucket"
 }

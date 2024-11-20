@@ -1,20 +1,12 @@
 resource "aws_s3_bucket" "loki_bucket_chunk" {
-  bucket        = local.bucket_chunk
+  bucket        = local.bucket_loki_chunk
   force_destroy = true
 }
 
 resource "aws_s3_bucket" "loki_bucket_ruler" {
-  bucket        = local.bucket_ruler
+  bucket        = local.bucket_loki_ruler
   force_destroy = true
 }
-
-# resource "helm_release" "agent_operator" {
-#   name       = "agent-operator"
-#   namespace  = var.namespace
-#   repository = "https://grafana.github.io/helm-charts"
-#   chart      = "grafana-agent-operator"
-#   version    = "0.5.0"
-# }
 
 resource "aws_iam_policy" "loki_s3_policy" {
   name        = "loki-s3-policy"
@@ -34,10 +26,10 @@ resource "aws_iam_policy" "loki_s3_policy" {
         "s3:DeleteObject"
       ],
       "Resource": [
-        "arn:aws:s3:::${local.bucket_chunk}",
-        "arn:aws:s3:::${local.bucket_chunk}/*",
-        "arn:aws:s3:::${local.bucket_ruler}",
-        "arn:aws:s3:::${local.bucket_ruler}/*"
+        "arn:aws:s3:::${local.bucket_loki_chunk}",
+        "arn:aws:s3:::${local.bucket_loki_chunk}/*",
+        "arn:aws:s3:::${local.bucket_loki_ruler}",
+        "arn:aws:s3:::${local.bucket_loki_ruler}/*"
       ]
     }
   ]
@@ -59,8 +51,8 @@ resource "aws_iam_role" "loki_s3_role" {
         Action = "sts:AssumeRoleWithWebIdentity"
         Condition = {
           StringEquals = {
-            "oidc.eks.${var.region}.amazonaws.com/id/${var.oidc_id}:sub" = "system:serviceaccount:${var.namespace}:${var.sa_loki_name}",
-            "oidc.eks.${var.region}.amazonaws.com/id/${var.oidc_id}:aud" = "sts.amazonaws.com"
+            "oidc.eks.${local.region}.amazonaws.com/id/${var.oidc_id}:sub" = "system:serviceaccount:${var.namespace}:${local.sa_loki_name}",
+            "oidc.eks.${local.region}.amazonaws.com/id/${var.oidc_id}:aud" = "sts.amazonaws.com"
           }
         }
       }
@@ -68,7 +60,7 @@ resource "aws_iam_role" "loki_s3_role" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "test-attach" {
+resource "aws_iam_role_policy_attachment" "loki-policy-attach" {
   role       = aws_iam_role.loki_s3_role.name
   policy_arn = aws_iam_policy.loki_s3_policy.arn
 }

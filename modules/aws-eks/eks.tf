@@ -18,27 +18,6 @@ module "eks" {
   subnet_ids               = var.vpc_private_subnets
   control_plane_subnet_ids = var.vpc_intra_subnets
 
-  # eks_managed_node_groups = {
-  #   loki_workers = {
-  #     instance_types = [yes
-  #       "t3.large"
-  #     ]
-  #     desired_capacity = 2
-  #     min_size         = 1
-  #     max_size         = 3
-  #     # ami_type         = "AL2023" # For Amazon Linux 2023
-  #     volume_size      = 80
-  #     volume_type      = "gp3"
-  #     ebs_optimized    = true
-  #
-  #
-  #     # IAM with addon policies
-  #     iam_role_additional_policies = {
-  #       "custom-permissions" = aws_iam_policy.ebs_policy.arn
-  #     }
-  #   }
-  # }
-
   self_managed_node_groups = {
 
     default_node_group = {
@@ -112,7 +91,7 @@ module "ebs_csi" {
   cluster_name                     = module.eks.cluster_name
   eks_open_id_connect_provider_url = module.eks.oidc_provider
   account_owner_id                 = data.aws_caller_identity.current.account_id
-  aws_region                       = var.region
+  aws_region                       = data.aws_region.current.name
 
 }
 
@@ -135,15 +114,3 @@ module "eks_blueprints_kubernetes_addons" {
     values = ["vpcID: ${var.vpc_id}"]
   }
 }
-
-# resource "aws_security_group_rule" "ingress_allow_access_from_control_plane" {
-#
-#   security_group_id = module.eks.cluster_primary_security_group_id
-#   type              = "ingress"
-#   protocol          = "tcp"
-#   from_port         = 8080
-#   to_port           = 8080
-#   cidr_blocks       = [var.vpc_cidr]
-#   description       = "Allow access from control plane to webhook port of AWS load balancer controller"
-# }
-

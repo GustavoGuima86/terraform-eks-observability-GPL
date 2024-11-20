@@ -8,15 +8,12 @@ variable "loki_bucket_name" {
   description = "Bucket name for Loki logs"
 }
 
+variable "mimir_bucket_name" {
+  type        = string
+  description = "Bucket name for mimir metrics"
+}
+
 variable "cluster_name" {
-  type = string
-}
-
-variable "sa_loki_name" {
-  type = string
-}
-
-variable "region" {
   type = string
 }
 
