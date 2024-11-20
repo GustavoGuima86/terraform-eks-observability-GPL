@@ -3,7 +3,7 @@
 
 Using the stack, Grafana, Prometheus, Loki and Mimir
 
-By relying in Opensource tool and S3 storage we are achieving a high level of cost saving and resilience.
+By relying in Opensource tool and S3 storage we are achieving a high level of cost-effectiveness and resilience.
 
 Tools applied:
 
